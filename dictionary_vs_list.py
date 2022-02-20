@@ -7,7 +7,7 @@ class Element:
         self.key = key
         self.value = value
 
-def my_way(home_dict, inbound_arr):
+def dict_way(home_dict, inbound_arr):
     inbound_dict = {}
     for i in inbound_arr:
         inbound_dict[i.key] = i
@@ -15,7 +15,7 @@ def my_way(home_dict, inbound_arr):
         if k in inbound_dict:
             home_dict[k] = inbound_dict[k].value
 
-def normal_way(home_dict, inbound_arr):
+def list_way(home_dict, inbound_arr):
     for k in home_dict:
         for i in inbound_arr:
             if k == i.key:
@@ -29,7 +29,10 @@ if __name__ == '__main__':
     home_dict = {random.randint(0, max):None for n in range(0,max)}
     inbound_arr = [Element(random.randint(0, max), random.randint(0, max)) for n in range(0,max)]
     op = sys.argv[1]
-    if op == 'a':
-        normal_way(home_dict, inbound_arr)
+    if op == 'l':
+        list_way(home_dict, inbound_arr)
     elif op == 'd':
-        my_way(home_dict, inbound_arr)
+        dict_way(home_dict, inbound_arr)
+    else:
+        print("Unknown op")
+
