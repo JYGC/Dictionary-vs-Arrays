@@ -9,24 +9,25 @@ type Element = struct
 end
 
 let rec getListElementIndex(inboundList: Element list, pointer: int, key: int): int =
-    let element: Element = inboundList.[pointer]
+    let element = inboundList.[pointer]
+
     if key = element.Key then
         pointer
     else
-        let nextPointer: int = pointer + 1
+        let nextPointer = pointer + 1
         if nextPointer < inboundList.Length then
             getListElementIndex(inboundList, nextPointer, key)
         else
             -1
 
-let listWay(homeDict: Map<int, int>, inboundList: Element list) =
+let listWay(homeDict: Map<int, int>, inboundList: Element list): Map<int, int> =
     homeDict |> Map.map(fun key value ->
         let index = getListElementIndex (inboundList, 0, key)
         match index with
         | -1 -> value
         | _ -> inboundList.[index].Value)
 
-let dictWay(homeDict: Map<int, int>, inboundList: Element list) =
+let dictWay(homeDict: Map<int, int>, inboundList: Element list): Map<int, int> =
     let inboundDict = inboundList |> List.map(fun element ->
         element.Key, element) |> Map.ofList
     homeDict |> Map.map(fun key value ->
@@ -36,15 +37,15 @@ let dictWay(homeDict: Map<int, int>, inboundList: Element list) =
             value)
 
 [<EntryPoint>]
-let main(args: string[]) = 
+let main(args: string[]): int = 
     let max = args.[1] |> int
 
     let random = Random()
-    let homeDict = List.init max (fun _ -> random.Next ()) |>
+    let homeDict = List.init max (fun _ -> random.Next()) |>
                     Seq.distinct |> List.ofSeq |> Seq.map (fun f -> f, 0) |>
                     Map.ofSeq
     let inboundList =
-        List.init max (fun _ -> new Element(random.Next (), random.Next ()))
+        List.init max (fun _ -> new Element(random.Next(), random.Next()))
     let op = args.[0] |> string
     match op with
     | "l" -> Console.WriteLine(listWay(homeDict, inboundList))
