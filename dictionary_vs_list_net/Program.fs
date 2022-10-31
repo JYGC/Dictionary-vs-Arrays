@@ -11,13 +11,11 @@ end
 let rec getListElementIndex(inboundList: Element list, pointer: int, key: int): int =
     let element = inboundList.[pointer]
 
+    let nextPointer = pointer + 1
     if key = element.Key then
         pointer
-    else
-        gotoNextIndex(inboundList, pointer + 1, key)
-and gotoNextIndex(inboundList: Element list, pointer: int, key: int): int =
-    if pointer < inboundList.Length then
-        getListElementIndex(inboundList, pointer, key)
+    elif nextPointer < inboundList.Length then
+        getListElementIndex(inboundList, nextPointer, key)
     else
         -1
 
@@ -42,11 +40,16 @@ let main(args: string[]): int =
     let max = args.[1] |> int
 
     let random = Random()
-    let homeDict = List.init max (fun _ -> random.Next()) |>
-                    Seq.distinct |> List.ofSeq |> Seq.map (fun f -> f, 0) |>
+    let homeDict =
+        seq {for key in 1 .. max do yield key} |>
+                    Seq.sortBy(fun _ -> random.Next(max)) |>
+                    Seq.map(fun key -> key, 0) |>
                     Map.ofSeq
     let inboundList =
-        List.init max (fun _ -> new Element(random.Next(), random.Next()))
+        seq {for key in 1 .. max do yield key} |>
+                    Seq.sortBy(fun _ -> random.Next(max)) |>
+                    Seq.map(fun key -> new Element(key, random.Next())) |>
+                    List.ofSeq
     let op = args.[0] |> string
     match op with
     | "l" -> Console.WriteLine(listWay(homeDict, inboundList))
