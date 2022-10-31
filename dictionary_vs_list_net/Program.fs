@@ -14,11 +14,12 @@ let rec getListElementIndex(inboundList: Element list, pointer: int, key: int): 
     if key = element.Key then
         pointer
     else
-        let nextPointer = pointer + 1
-        if nextPointer < inboundList.Length then
-            getListElementIndex(inboundList, nextPointer, key)
-        else
-            -1
+        gotoNextIndex(inboundList, pointer + 1, key)
+and gotoNextIndex(inboundList: Element list, pointer: int, key: int): int =
+    if pointer < inboundList.Length then
+        getListElementIndex(inboundList, pointer, key)
+    else
+        -1
 
 let listWay(homeDict: Map<int, int>, inboundList: Element list): Map<int, int> =
     homeDict |> Map.map(fun key value ->
